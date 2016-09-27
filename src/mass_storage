@@ -1,0 +1,57 @@
+#!/bin/sh
+
+# /etc/initramfs-tools/scripts/init-premount/mass_storage
+
+PREREQS=""
+
+prereqs() { echo "$PREREQS"; }
+
+case "$1" in
+    prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+echo
+echo "Starting g_mass_storage script"
+echo "https://github.com/zador-blood-stained/fel-mass-storage"
+
+cmdline=$(cat /proc/cmdline)
+
+case "$cmdline" in
+	*"root=/dev/"*)
+	echo "Kernel started with root= command line parameter, exiting"
+	exit 0
+	;;
+esac
+
+if [ -e "/dev/mmcblk1" ]; then
+	TARGET=/dev/mmcblk1
+	TYPE="MMC 2 (eMMC)"
+elif [ -e "/dev/mmcblk0" ]; then
+	TARGET=/dev/mmcblk0
+	TYPE="MMC 0 (SD)"
+else
+	echo "No SD/eMMC device found"
+	exit 0
+fi
+
+echo "Exporting $TYPE ($TARGET)"
+
+echo "0" > /sys/bus/platform/devices/sunxi_usb_udc/otg_role
+
+modprobe -r g_mass_storage
+modprobe g_mass_storage file=$TARGET removable=0 ro=0 stall=0 iProduct="Allwinner device $TYPE"
+
+echo "2" > /sys/bus/platform/devices/sunxi_usb_udc/otg_role
+
+echo "Done"
+
+sh
+
+echo "Shutting down"
+echo "0" > /sys/bus/platform/devices/sunxi_usb_udc/otg_role
+modprobe -r g_mass_storage
+
+[ ! -f "/tmp/no_poweroff" ] && poweroff

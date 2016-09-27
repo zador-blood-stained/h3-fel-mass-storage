@@ -1,6 +1,6 @@
 # Preparations
 
-## Linux
+## Linux and OS X
 
 - compile and install [sunxi-tools](https://github.com/linux-sunxi/sunxi-tools)
 
