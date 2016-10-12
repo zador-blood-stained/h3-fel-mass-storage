@@ -29,4 +29,6 @@ SUBSYSTEMS=="usb", ATTR{idVendor}=="1f3a", ATTR{idProduct}=="efe8", GROUP="sunxi
 
 If eMMC is not detected, SD card will be exported instead
 
-Some boards (like [Orange Pi PC Plus](https://linux-sunxi.org/Orange_Pi_PC#Orange_Pi_PC_Plus)) which don't have FEL button may require special SD image to [Enter FEL mode](https://linux-sunxi.org/FEL#Entering_FEL_mode)
+Some boards (like [Orange Pi PC Plus](https://linux-sunxi.org/Orange_Pi_PC#Orange_Pi_PC_Plus)) which don't have FEL button require using special SD image to [enter FEL mode](https://linux-sunxi.org/FEL#Entering_FEL_mode):
+
+Use `dd`, `Rufus` or `Etcher` to flash fel-sdboot.img to SD card like any OS image and use this card to boot the board in FEL mode.
